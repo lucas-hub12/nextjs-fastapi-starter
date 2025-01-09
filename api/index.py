@@ -22,7 +22,7 @@ def age_calculator(birthday: str) -> Dict[str, str]:
     birth_date =datetime.strptime(birthday, "%Y-%m-%d").date()
 
     # 기본 나이는 올해에서 태어난 해를 뺀 값
-    age = today.year - birth_year
+    age = today.year - birth_date.year
 
     # 생일이 아직 오지 않았다면 나이를 1살 줄임
     if (today.month, today.day) <= (birth_date.month, birth_date.day):
