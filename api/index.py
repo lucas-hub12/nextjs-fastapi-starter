@@ -18,7 +18,6 @@ def age_calculator(birthday: str) -> Dict[str, str]:
     :param birthday: 생년월일 (형식: YYYY-MM-DD)
     :return: 생년월일 및 만나이를 포함한 JSON 응답
     """
-
     today = date.today()
     birth_date =datetime.strptime(birthday, "%Y-%m-%d").date()
 
