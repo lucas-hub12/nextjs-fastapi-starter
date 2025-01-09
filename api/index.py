@@ -25,7 +25,7 @@ def age_calculator(birthday: str) -> Dict[str, str]:
     age = today.year - birth_date.year
 
     # 생일이 아직 오지 않았다면 나이를 1살 줄임
-    if (today.month, today.day) <= (birth_date.month, birth_date.day):
+    if (today.month, today.day) < (birth_date.month, birth_date.day):
         age = age - 1
 
     return {
