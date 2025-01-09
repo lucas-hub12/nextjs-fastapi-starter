@@ -22,20 +22,15 @@ def age_calculator(birthday: str) -> Dict[str, str]:
     birth_date =datetime.strptime(birthday, "%Y-%m-%d").date()
 
     # 기본 나이는 올해에서 태어난 해를 뺀 값
-    age = today.year - birth_date.year
-    
+    age = today.year - birth_date.year  
     zodiac_animals = ["쥐", "소", "호랑이", "토끼", "용", "뱀", "말", "양", "원숭이", "닭", "개", "돼지"]
     zodiac_index = (birth_date.year - 4) % 12 # 4는 기준연도(쥐 띠 시작) 보정값
-    zodiac =  zodiac_animals[zodiac_index]
+    zodiac = zodiac_animals[zodiac_index]
     
-
-
-
     # 생일이 아직 오지 않았다면 나이를 1살 줄임
     if (today.month, today.day) < (birth_date.month, birth_date.day):
         age = age - 1
     
-
     return {
             "birthday": birthday,
             "age": str(age),
