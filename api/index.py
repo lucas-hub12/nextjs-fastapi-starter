@@ -28,12 +28,12 @@ def age_calculator(birthday: str) -> Dict[str, str]:
     zodiac = zodiac_animals[zodiac_index]
     
     # 생일이 아직 오지 않았다면 나이를 1살 줄임
-    if (today.month, today.day) < (birth_date.month, birth_date.day):
-        age = age - 1
+    #if (today.month, today.day) < (birth_date.month, birth_date.day):
+    #    age = age - 1
     
     return {
             "birthday": birthday,
             "age": f"{age}살 - 당신의 띠는:{zodiac}",
             "basedate": str(today),
-            "message": "Age calculated successfully!
+            "message": "Age calculated successfully!"
             }
