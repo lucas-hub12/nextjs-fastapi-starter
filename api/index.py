@@ -1,4 +1,4 @@
-from fastap import FastAPI
+from fastapi import FastAPI
 from datetime import datetime, date
 from typing import Dict
 import random
@@ -23,7 +23,20 @@ def age_calculator(birthday: str) -> Dict[str, str]:
 
     # 기본 나이는 올해에서 태어난 해를 뺀 값
     age = today.year - birth_date.year  
-    zodiac_animals = ["쥐", "소", "호랑이", "토끼", "용", "뱀", "말", "양", "원숭이", "닭", "개", "돼지"]
+    zodiac_animals = [
+                      "🐀 Rat", # 자 - 쥐
+                      "🐂 Ox", # 축 - 소
+                      "🐅 Tiger", # 인 - 호랑이
+                      "🐇 Rabbit", # 묘 - 토끼
+                      "🐉 Dragon", # 진 - 용
+                      "🐍 Snake", # 사 - 뱀
+                      "🐎 Horse", # 오 - 말
+                      "🐐 Goat", # 미 - 양
+                      "🐒 Monkey", # 신 - 원숭이
+                      "🐓 Rooster", # 유 - 닭
+                      "🐕 Dog", # 술 - 개
+                      "🐖 Pig" # 해 - 돼지
+                      ]
     zodiac_index = (birth_date.year - 4) % 12 # 4는 기준연도(쥐 띠 시작) 보정값
     zodiac = zodiac_animals[zodiac_index]
     
@@ -33,8 +46,7 @@ def age_calculator(birthday: str) -> Dict[str, str]:
     
     return {
             "birthday": birthday,
-            "age": str(age),
+            "age": f"{age}살 - 당신의 띠는:{zodiac}",
             "basedate": str(today),
-            "message": "Age calculated successfully!",
-            "zodiac": zodiac
+            "message": "Age calculated successfully!"
             }
