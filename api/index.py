@@ -1,4 +1,4 @@
-from fastap import FastAPI
+from fastapi import FastAPI
 from datetime import datetime, date
 from typing import Dict
 import random
