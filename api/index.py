@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from datetime import datetime, date
 from typing import Dict
 import random
+import korean_age_calculator as kac
 
 ### Create FastAPI instance with custom docs and openapi url
 app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
@@ -20,6 +21,12 @@ def age_calculator(birthday: str) -> Dict[str, str]:
     """
     today = date.today()
     birth_date =datetime.strptime(birthday, "%Y-%m-%d").date()
+    
+    # 램덤으로 이름이 나오기
+    names = ["조민규","강현룡","권오준","서민혁","백지원","안재영","전희진","배형균","조성근"]
+    random_name = random.choice(names)
+    # 한국식 나이 계산
+    kage = kac.how_korean_age(year_of_birth=birth_date.year)
 
     # 기본 나이는 올해에서 태어난 해를 뺀 값
     age = today.year - birth_date.year  
@@ -46,7 +53,7 @@ def age_calculator(birthday: str) -> Dict[str, str]:
     
     return {
             "birthday": birthday,
-            "age": f"{age}살 - 당신의 띠는:{zodiac}",
+            "age": f"만나이는:{age}살- 한국나이는:{kage}살 - 당신의 띠는:{zodiac} - 발표자는:{random_name}!!",
             "basedate": str(today),
             "message": "Age calculated successfully!"
             }
