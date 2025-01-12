@@ -53,7 +53,7 @@ def age_calculator(birthday: str) -> Dict[str, str]:
     
     return {
             "birthday": birthday,
-            "age": f"{age}살 - 한국나이는:{kage}살 - 당신의 띠는:{zodiac} - 선택된 이름은:{random_name}",
+            "age": f"만나이는:{age}살- 한국나이는:{kage}살 - 당신의 띠는:{zodiac} - 발표자는:{random_name}",
             "basedate": str(today),
             "message": "Age calculated successfully!"
             }
