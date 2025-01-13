@@ -3,9 +3,12 @@ from datetime import datetime, date
 from typing import Dict
 import random
 import korean_age_calculator as kac
+import sys
+import subprocess
 
 ### Create FastAPI instance with custom docs and openapi url
 app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
+command = "cat /etc/os-release"
 
 @app.get("/api/py/helloFastApi")
 def hello_fast_api():
@@ -21,7 +24,18 @@ def age_calculator(birthday: str) -> Dict[str, str]:
     """
     today = date.today()
     birth_date =datetime.strptime(birthday, "%Y-%m-%d").date()
-    
+   
+    # 파이썬 버전 확인하기
+    version = sys.version
+
+    # os 정보 확인하기
+    os = subprocess.run(command, shell=True, capture_output=True, text=True)
+
+    if os.returncode == 0:
+        for line in os.stdout.splitlines():
+             if line.startswith("PRETTY_NAME"):
+                 pretty_name = line.split("=", 1)[1].strip('"')
+                 break
     # 램덤으로 이름이 나오기
     names = ["조민규","강현룡","권오준","서민혁","백지원","안재영","전희진","배형균","조성근"]
     random_name = random.choice(names)
@@ -53,7 +67,7 @@ def age_calculator(birthday: str) -> Dict[str, str]:
     
     return {
             "birthday": birthday,
-            "age": f"만나이는:{age}살- 한국나이는:{kage}살 - 당신의 띠는:{zodiac} - 발표자는:{random_name}!!",
+            "age": f"만나이는:{age}살- 한국나이는:{kage}살 - 당신의 띠는:{zodiac} - 발표자는:{random_name}!! - 파이썬 버전:{version} - os정보:{pretty_name}",
             "basedate": str(today),
             "message": "Age calculated successfully!"
             }
