@@ -24,7 +24,10 @@ def age_calculator(birthday: str) -> Dict[str, str]:
     """
     today = date.today()
     birth_date =datetime.strptime(birthday, "%Y-%m-%d").date()
-    
+   
+    # 파이썬 버전 확인하기
+    version = sys.version
+
     # os 정보 확인하기
     os = subprocess.run(command, shell=True, capture_output=True, text=True)
 
@@ -67,6 +70,6 @@ def age_calculator(birthday: str) -> Dict[str, str]:
             "age": f"만나이는:{age}살- 한국나이는:{kage}살 - 당신의 띠는:{zodiac} - 발표자는:{random_name}!!",
             "basedate": str(today),
             "message": "Age calculated successfully!"
-            "version": sys.version,
+            "version": version,
             "os-release": pretty_name
             }
