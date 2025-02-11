@@ -95,29 +95,8 @@ def get_connection():
 
 @app.get("/api/py/select_all")
 def select_all():
-    query = """
-    SELECT
-        l.menu_name,
-        m.name,
-        l.dt
-    FROM
-        lunch_menu l
-        inner join member m
-        on l.member_id = m.id
-    """
+
     with psycopg.connect(**DB_CONFIG, row_factory=dict_row) as conn:
-        cur = conn.execute(query)
+        cur = conn.execute("select * from view_select_all")
         rows = cur.fetchall()
         return rows
-    
-    # conn = get_connection()
-    # cursor = conn.cursor()
-    # cursor.execute(query)
-    # rows = cursor.fetchall()
-    # cursor.close()
-    # conn.close()
-
-    # # selected_df = pd.DataFrame([[1,2,3],[4,5,6]], columns=['a','b','c'])
-    # selected_df = pd.DataFrame(rows, columns=['menu_name', 'member_name', 'dt'])
-    # selected_df = selected_df.sort_values(by='dt', ascending=False)
-    # return selected_df.to_dict(orient="records")
