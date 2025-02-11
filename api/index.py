@@ -5,10 +5,17 @@ import random
 import korean_age_calculator as kac
 import sys
 import subprocess
+import pandas as pd
+import psycopg
+from dotenv import load_dotenv
+import os
+from psycopg.rows import dict_row
 
 ### Create FastAPI instance with custom docs and openapi url
 app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
+
 command = "cat /etc/os-release"
+
 
 @app.get("/api/py/helloFastApi")
 def hello_fast_api():
@@ -23,8 +30,8 @@ def age_calculator(birthday: str) -> Dict[str, str]:
     :return: 생년월일 및 만나이를 포함한 JSON 응답
     """
     today = date.today()
-    birth_date =datetime.strptime(birthday, "%Y-%m-%d").date()
-   
+    birth_date = datetime.strptime(birthday, "%Y-%m-%d").date()
+
     # 파이썬 버전 확인하기
     version = sys.version
 
@@ -33,9 +40,9 @@ def age_calculator(birthday: str) -> Dict[str, str]:
 
     if os.returncode == 0:
         for line in os.stdout.splitlines():
-             if line.startswith("PRETTY_NAME"):
-                 pretty_name = line.split("=", 1)[1].strip('"')
-                 break
+            if line.startswith("PRETTY_NAME"):
+                pretty_name = line.split("=", 1)[1].strip('"')
+                break
     # 램덤으로 이름이 나오기
     names = ["조민규","강현룡","권오준","서민혁","백지원","안재영","전희진","배형균","조성근"]
     random_name = random.choice(names)
@@ -59,15 +66,58 @@ def age_calculator(birthday: str) -> Dict[str, str]:
                       "🐖 Pig" # 해 - 돼지
                       ]
     zodiac_index = (birth_date.year - 4) % 12 # 4는 기준연도(쥐 띠 시작) 보정값
-    zodiac = zodiac_animals[zodiac_index]
-    
+    zodiac = zodiac_animals[zodiac_index]    
     # 생일이 아직 오지 않았다면 나이를 1살 줄임
     if (today.month, today.day) < (birth_date.month, birth_date.day):
         age = age - 1
-    
     return {
             "birthday": birthday,
             "age": f"만나이는:{age}살- 한국나이는:{kage}살 - 당신의 띠는:{zodiac} - 발표자는:{random_name}!! - 파이썬 버전:{version} - os정보:{pretty_name}",
             "basedate": str(today),
             "message": "Age calculated successfully!"
             }
+
+
+load_dotenv()
+
+DB_CONFIG = {
+    "dbname": os.getenv("DB_NAME"),
+    "user": os.getenv("DB_USERNAME"),
+    "password": os.getenv("DB_PASSWORD"),
+    "host": os.getenv("DB_HOST"),
+    "port": os.getenv("DB_PORT"),
+}
+
+
+def get_connection():
+    return psycopg.connect(**DB_CONFIG)
+
+
+@app.get("/api/py/select_all")
+def select_all():
+    query = """
+    SELECT
+        l.menu_name,
+        m.name,
+        l.dt
+    FROM
+        lunch_menu l
+        inner join member m
+        on l.member_id = m.id
+    """
+    with psycopg.connect(**DB_CONFIG, row_factory=dict_row) as conn:
+        cur = conn.execute(query)
+        rows = cur.fetchall()
+        return rows
+    
+    # conn = get_connection()
+    # cursor = conn.cursor()
+    # cursor.execute(query)
+    # rows = cursor.fetchall()
+    # cursor.close()
+    # conn.close()
+
+    # # selected_df = pd.DataFrame([[1,2,3],[4,5,6]], columns=['a','b','c'])
+    # selected_df = pd.DataFrame(rows, columns=['menu_name', 'member_name', 'dt'])
+    # selected_df = selected_df.sort_values(by='dt', ascending=False)
+    # return selected_df.to_dict(orient="records")
